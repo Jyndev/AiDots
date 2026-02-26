@@ -1,0 +1,75 @@
+@use "colors" as col;
+
+button {
+  // Quita el borde azul de "foco" de GTK
+  outline: none;
+  box-shadow: none;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  // Esto elimina el resaltado azul nativo de GTK4 al presionar
+  &:active {
+    background-image: none;
+    background-color: rgba(col.$accent, 0.2); // Cambia el azul por un flash rojo suave
+  }
+}
+
+.control-card {
+  background-color: col.$bg_color_light;
+  border: 1px solid rgba(col.$accent, 0.15); // Borde Ámbar sutil
+  border-radius: 28px;
+  padding: 32px;
+  min-width: 400px;
+}
+
+.control-header {
+  .user-photo {
+    background-color: col.$bg_color;
+    border-radius: 14px;
+  }
+
+  .user-name {
+    color: col.$fg_color;
+    font-weight: 700;
+  }
+
+  .uptime-title {
+    color: col.$fg_color_muted;
+    font-size: 0.6rem;
+    font-weight: 900;
+  }
+
+  .uptime-value {
+    color: col.$accent; // Ámbar para el tiempo activo
+    font-weight: 600;
+  }
+}
+
+.square-btn {
+  background-color: col.$bg_color;
+  border: 1px solid rgba(col.$accent_light, 0.6);
+  border-radius: 20px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  image { color: col.$accent; }
+
+  &:hover {
+    background-color: col.$accent_light;
+    border-color: col.$accent;
+    image { color: col.$fg_color; } // El icono brilla en crema al hover
+  }
+
+  &.active {
+    background-color: rgba(col.$accent, 0.15);
+    border-color: col.$accent;
+    image { color: col.$accent; }
+  }
+}
+
+.close-panel-btn {
+  color: col.$fg_color_muted;
+  &:hover { color: col.$accent; }
+}

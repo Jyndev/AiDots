@@ -1,0 +1,36 @@
+@use "colors" as col;
+@use "constants" as con;
+
+.network-info-box {
+  font-family: "Fredoka";
+  padding: con.$padding;
+  border-radius: con.$radius;
+  background-color: col.$bg_color;
+  transition: all 0.3s ease;
+
+  // Estilo del icono (Cian gélido #48dbfb)
+  > .network-icon {
+    color: col.$accent;
+    -gtk-icon-size: 14px;
+    margin-right: 2px;
+  }
+
+  // Estilo del texto (Nombre Wifi o VPN)
+  > label.system-value {
+    color: col.$fg_color; // Blanco gélido #E6F7FF
+    font-size: 0.9rem;
+  }
+
+  // Hover dinámico
+  &:hover {
+    background-color: col.$bg_color_light;
+    
+    > label.system-value {
+      color: col.$accent_hover; // Violeta suave
+    }
+    
+    > .network-icon {
+      color: col.$accent_hover;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+[config.wallpaper]
+command = ""
+arguments = []
+set = false
+
+[templates.rofi]
+input_path = './templates/rofi.rasi'
+output_path = '~/.cache/colors/rofi.rasi'
+
+[templates.kitty]
+input_path = './templates/kitty.conf'
+output_path = '~/.cache/colors/kitty.conf'
+
+[templates.ags]
+input_path = './templates/ags.scss'
+output_path = '~/.config/ags/yuu/_colors.scss'

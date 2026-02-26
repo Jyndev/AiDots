@@ -1,0 +1,89 @@
+@use "_colors" as col;
+
+// Contenedores invisibles
+window,
+.popups-container {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+.notification-popup {
+  background-color: col.$bg_color_light;
+  border-radius: 12px;
+  padding: 10px 12px; // Más compacto
+  margin-bottom: 6px;
+  
+  // Borde minimalista: solo un detalle de color a la izquierda
+  border: 1px solid rgba(col.$accent_light, 0.4);
+  border-left: 2px solid col.$accent; 
+  
+}
+
+// --- Cabecera Minimalista ---
+.notification-header {
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+
+  .app-icon {
+    color: col.$accent_hover; // Cian
+    margin-right: 4px;
+  }
+
+  .app-name {
+    color: col.$fg_color_muted; 
+    font-size: 0.65rem; // Muy pequeño y discreto
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+}
+
+// --- Contenido (Título más pequeño) ---
+.notification-summary {
+  color: col.$accent; // Rosa Neón
+  font-weight: 600;
+  font-family: "Fredoka", sans-serif;
+  font-size: 0.9rem; // Tamaño reducido para no ocupar tanto
+  margin-bottom: 1px;
+}
+
+.notification-body {
+  color: col.$fg_color;
+  font-size: 0.85rem; // Ajustado proporcionalmente
+  line-height: 1.2;
+}
+
+.notification-image {
+  border-radius: 6px;
+  background-color: col.$bg_color;
+  margin-right: 10px;
+}
+
+// --- Botón de Cierre Minimalista ---
+.notification-close {
+  background: transparent;
+  border-radius: 6px;
+  color: col.$fg_color_muted;
+  
+  &:hover {
+    background-color: col.$accent_light;
+    color: col.$accent_hover;
+  }
+  
+  image {
+    padding: 1px;
+    // Icono de cierre más pequeño si es necesario
+  }
+}
+
+.popups-container {
+  margin: 8px;
+}
+
+.app-icon {
+  color: col.$accent_hover;
+  min-width: 14px;
+  min-height: 14px;
+}

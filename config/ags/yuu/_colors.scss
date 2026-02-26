@@ -1,0 +1,21 @@
+
+// Plantilla de SCSS para AGS usando Matugen
+// Para procesarla, asegúrate de tener algo como esto en tu archivo config de matugen (~/.config/matugen/config.toml):
+//
+// [templates.ags]
+// input_path = "/Ruta/Absoluta/A/Esta/Plantilla/ags_colors_template.scss"
+// output_path = "/Ruta/Absoluta/A/Tu/Configuracion/ags/colors.scss"
+
+$bg_color: #181115;             // Fondo base
+$bg_color_light: #251e21; // Elevación y capas (Color superficie más claro)
+
+// SCSS nativamente permite pasarle un HEX a rgba() con opacidad, 
+// o usar la función fade-out() / transparentize() de SASS.
+$bg_color_translucent: rgba(#181115, 0.6); 
+
+$fg_color: #eddfe4;           // Texto principal (Color que contrasta con el fondo)
+$fg_color_muted: #d3c2c9;// Texto secundario / muted
+
+$accent: #f8b1dd;                   // Acento principal y títulos
+$accent_hover: #ddbecf;           // Color de hover (Material Design 3 'secondary' o 'tertiary')
+$accent_light: #6a3459;   // Contrastes oscuros (Contenedor primario)
