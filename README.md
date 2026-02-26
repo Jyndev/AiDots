@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://www.tiktok.com/@jyndev"><img src="https://github.com/user-attachments/assets/69b56f2e-4fb4-4066-bd95-9764121bf668" alt="JynDev" width="200"></a>
+  <a href="https://www.tiktok.com/@jyndev"><img src="images/jynprofile.png" alt="JynDev" width="200"></a>
   <br>
   JynDev - Dotfiles 🐱
   <br>
@@ -43,6 +43,8 @@
 ## 🚀 Dotfiles - Takanashi Version 🌠
 
 Bienvenido a mi colección actualizada de **dotfiles** y configuraciones personalizadas para **Arch Linux** con **Hyprland**. En esta nueva versión, hemos dado un gran salto: **hemos reemplazado Waybar, Eww y Cava** en favor de **AGS (Aylur's GTK Shell)** y **Kitty** como terminal principal, ofreciendo un entorno mucho más rápido, dinámico y cohesivo.
+
+> 🎁 **Créditos Especiales:** El diseño base y lógica de la nueva barra (AGS) pertenecen al excelente trabajo de [gitKhym/dotfiles](https://github.com/gitKhym/dotfiles). ¡Todos los créditos de la barra para su autor original!
 
 > ⚠️ **Advertencia importante**  
 > Estos **dotfiles** están basados en **mi configuración de trabajo personal**.  
