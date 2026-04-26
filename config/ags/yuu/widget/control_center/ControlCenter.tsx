@@ -77,6 +77,15 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
                 return false;
             });
         }},
+        { id: "wallpaper", icon: "preferences-desktop-wallpaper-symbolic", click: () => {
+            const win = windows[gdkmonitor.connector];
+            if (win) (win as any).visible = false;
+            
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
+                GLib.spawn_command_line_async(`${home}/.config/FondosApp/FondosApp`);
+                return false;
+            });
+        }},
     ]
 
     actions.forEach((btnData, i) => {
@@ -90,7 +99,7 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
 
         button.set_child(img)
         button.connect("clicked", btnData.click)
-        grid.attach(button, i, 0, 1, 1)
+        grid.attach(button, i % 3, Math.floor(i / 3), 1, 1)
     })
 
     // 5. VENTANA PRINCIPAL
