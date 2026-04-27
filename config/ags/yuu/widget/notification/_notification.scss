@@ -1,89 +1,100 @@
 @use "_colors" as col;
 
-// Contenedores invisibles
-window,
-.popups-container {
+window {
   background-color: transparent;
   background-image: none;
   border: none;
   box-shadow: none;
 }
 
-.notification-popup {
+.popups-wrapper {
+  margin: 15px;
+}
+
+.pill-card {
   background-color: col.$bg_color_light;
-  border-radius: 12px;
-  padding: 10px 12px; // Más compacto
-  margin-bottom: 6px;
-  
-  // Borde minimalista: solo un detalle de color a la izquierda
-  border: 1px solid rgba(col.$accent_light, 0.4);
-  border-left: 2px solid col.$accent; 
-  
+  border-radius: 35px;
+  padding: 10px 20px;
+  min-height: 70px;
+  min-width: 380px;
+
+  // Todos los elementos usan margen negativo: el primero tiene margen 0, los demás solapan.
+  // Esto garantiza que no haya "spacing" residual cuando los invisibles (depth >= 3) se apilan.
+  margin-top: 0;
+
+  // Transición Apple Glide
+  transition: all 400ms cubic-bezier(0.2, 0.9, 0.1, 1);
+  border: 1px solid rgba(col.$fg_color_muted, 0.15);
+  box-shadow: none;
 }
 
-// --- Cabecera Minimalista ---
-.notification-header {
-  margin-bottom: 4px;
-  padding-bottom: 2px;
-
-  .app-icon {
-    color: col.$accent_hover; // Cian
-    margin-right: 4px;
-  }
-
-  .app-name {
-    color: col.$fg_color_muted; 
-    font-size: 0.65rem; // Muy pequeño y discreto
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
+// Todo card que no sea el primero visual (el más abajo en DOM = más antiguo = más enterrado) solapa
+.pill-card:not(:first-child) {
+  margin-top: -55px;
 }
 
-// --- Contenido (Título más pequeño) ---
-.notification-summary {
-  color: col.$accent; // Rosa Neón
-  font-weight: 600;
-  font-family: "Fredoka", sans-serif;
-  font-size: 0.9rem; // Tamaño reducido para no ocupar tanto
-  margin-bottom: 1px;
+// ── Capas de Perspectiva ──────────────────────────────
+// depth 0 = notificación más nueva (frente)
+.stack-pos-0 {
+  opacity: 1;
+  margin-left: 0;
+  margin-right: 0;
 }
-
-.notification-body {
-  color: col.$fg_color;
-  font-size: 0.85rem; // Ajustado proporcionalmente
-  line-height: 1.2;
-}
-
-.notification-image {
-  border-radius: 6px;
-  background-color: col.$bg_color;
+.stack-pos-1 {
+  opacity: 0.6;
+  margin-left: 10px;
   margin-right: 10px;
 }
+.stack-pos-2 {
+  opacity: 0.2;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+// depth 3+ → fantasmas invisibles (buffer de animación, no se ven)
+.stack-pos-3, .stack-pos-4, .stack-pos-5, .stack-pos-6, .stack-pos-7 {
+  opacity: 0;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: -70px; // Se hunde completamente sin desplazar los demás
+}
 
-// --- Botón de Cierre Minimalista ---
-.notification-close {
-  background: transparent;
-  border-radius: 6px;
+// ── Inner Content ─────────────────────────────────────
+.avatar {
+  border-radius: 50%;
+  border: 1px solid rgba(col.$fg_color_muted, 0.2);
+  background-color: col.$accent_light;
+}
+
+.action-text {
+  color: col.$fg_color;
+  font-size: 13px;
+}
+
+.timestamp {
   color: col.$fg_color_muted;
-  
+  font-size: 11px;
+}
+
+.category-badge {
+  background-color: col.$accent_light;
+  border-radius: 50px;
+  padding: 1px 8px;
+  label {
+    font-size: 10px;
+    font-weight: bold;
+    color: col.$accent;
+  }
+}
+
+.notification-close-invisible {
+  background: transparent;
+  box-shadow: none;
+  min-height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+  transition: 0.2s all;
+
   &:hover {
-    background-color: col.$accent_light;
-    color: col.$accent_hover;
+    background-color: rgba(col.$fg_color, 0.1);
   }
-  
-  image {
-    padding: 1px;
-    // Icono de cierre más pequeño si es necesario
-  }
-}
-
-.popups-container {
-  margin: 8px;
-}
-
-.app-icon {
-  color: col.$accent_hover;
-  min-width: 14px;
-  min-height: 14px;
 }

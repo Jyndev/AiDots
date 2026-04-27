@@ -1,15 +1,16 @@
 import { Astal, Gtk, Gdk } from "ags/gtk4"
 import GLib from "gi://GLib"
 import Gio from "gi://Gio"
+import { NotificationHistoryView } from "../notification/NotificationHistoryView"
+import { ClipboardView } from "./ClipboardView"
 
 const windows: Record<string, Gtk.Window> = {}
 const airplaneIcons: Record<string, Gtk.Image> = {}
 const airplaneButtons: Record<string, Gtk.Button> = {}
-
 export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
     const home = GLib.get_home_dir()
     
-    // 1. LÓGICA DE USUARIO ROBUSTA (Evita el "Unknown")
+    // Header Data
     const realName = GLib.get_real_name()
     const loginName = GLib.get_user_name()
     const displayName = (realName && realName !== "Unknown" && realName !== "") 
@@ -19,18 +20,26 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
     const userImagePath = `${home}/.config/ags/yuu/assets/user.png`
     const imageExists = Gio.File.new_for_path(userImagePath).query_exists(null)
 
-    // 2. UPTIME MANUAL (Evita errores de Promise/Poll)
     const getUptimeStr = () => {
         try {
-            const [res, out] = GLib.spawn_command_line_sync(`bash -c "uptime -p | sed 's/up //; s/ hours\\?, /h:/; s/ minutes\\?/m/; s/ hour\\?, /h:/; s/ minute\\?/m/'"`)
-            return new TextDecoder().decode(out).trim() || "0h:0m"
-        } catch (e) { return "0h:0m" }
+            const [res, out] = GLib.spawn_command_line_sync("uptime -p");
+            let up = new TextDecoder().decode(out).trim().replace("up ", "");
+            up = up.replace(/days?/g, "días")
+                   .replace("day", "día")
+                   .replace(/hours?/g, "horas")
+                   .replace("hour", "hora")
+                   .replace(/minutes?/g, "minutos")
+                   .replace("minute", "minuto");
+            up = up.replace(/,([^,]*)$/, " y$1");
+            up = up.replace(/,/g, "");
+            return `Encendido ${up}`;
+        } catch (e) { return "Encendido 0 minutos" }
     }
 
     const uptimeLabel = new Gtk.Label({ 
-        css_classes: ["uptime-value"], 
+        css_classes: ["uptime-title"], 
         label: getUptimeStr(),
-        halign: Gtk.Align.END 
+        halign: Gtk.Align.CENTER 
     })
 
     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 60000, () => {
@@ -38,7 +47,49 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
         return true
     })
 
-    // 3. ACTUALIZACIÓN MANUAL DE ICONO DE AVIÓN
+    // Header Widget
+    const header = (
+        <box cssClasses={["control-header"]} orientation={Gtk.Orientation.VERTICAL} spacing={12} halign={Gtk.Align.FILL}>
+            <box 
+                cssClasses={["user-photo"]} 
+                widthRequest={85} heightRequest={85}
+                halign={Gtk.Align.CENTER}
+                css={imageExists 
+                    ? `background-image: url("file://${userImagePath}"); background-size: cover; background-position: center;` 
+                    : ``}
+            >
+                {!imageExists && <image iconName="avatar-default-symbolic" pixelSize={40} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand />}
+            </box>
+            <box cssClasses={["user-info-pill"]} orientation={Gtk.Orientation.VERTICAL} halign={Gtk.Align.CENTER}>
+                <label label={displayName} cssClasses={["user-name"]} halign={Gtk.Align.CENTER} />
+                {uptimeLabel}
+            </box>
+        </box>
+    )
+
+    // Stack and Navigation
+    const stack = new Gtk.Stack({ 
+        transition_type: Gtk.StackTransitionType.CROSSFADE,
+        vhomogeneous: false,
+        interpolate_size: true,
+        css_classes: ["content-area-stack"]
+    })
+    
+    // StackWrapper acts as the island container
+    const stackWrapper = new Gtk.Box({
+        css_classes: ["cc-block"],
+        orientation: Gtk.Orientation.VERTICAL
+    })
+    stackWrapper.append(stack)
+    
+    // StackSwitcher is a native GTK widget to switch tabs
+    const navTabs = new Gtk.StackSwitcher({ 
+        stack: stack,
+        halign: Gtk.Align.CENTER,
+        css_classes: ["nav-tabs"]
+    })
+
+    // ACTUALIZACIÓN MANUAL DE ICONO DE AVIÓN
     const updateAirplaneUI = () => {
         try {
             const [res, out] = GLib.spawn_command_line_sync("nmcli radio wifi")
@@ -56,53 +107,80 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
         } catch (e) { console.error(e) }
     }
 
-    // 4. GRID DE BOTONES
-    const grid = new Gtk.Grid({ column_spacing: 15, row_spacing: 15, halign: Gtk.Align.CENTER })
+    // Actions Page (Split Row Layout)
+    const actionsBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10, css_classes: ["split-action-row"], homogeneous: true })
 
-    const actions = [
-        { id: "power", icon: "system-shutdown-symbolic", click: () => GLib.spawn_command_line_async("poweroff") },
-        { id: "reboot", icon: "system-reboot-symbolic", click: () => GLib.spawn_command_line_async("reboot") },
-        { id: "airplane", icon: "network-wireless-symbolic", click: () => {
-            GLib.spawn_command_line_async(`bash ${home}/.config/ags/yuu/scripts/airplane.sh`)
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => { updateAirplaneUI(); return false })
-        }},
-        { id: "shot", icon: "camera-photo-symbolic", click: () => {
-            // 1. Buscamos la ventana del monitor actual
-            const win = windows[gdkmonitor.connector];
-            if (win) (win as any).visible = false; // 2. Ocultamos el panel inmediatamente
-
-            // 3. Ejecutamos hyprshot con un pequeño delay para que el panel desaparezca visualmente
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
-                GLib.spawn_command_line_async("hyprshot -m region");
-                return false;
-            });
-        }},
-        { id: "wallpaper", icon: "preferences-desktop-wallpaper-symbolic", click: () => {
-            const win = windows[gdkmonitor.connector];
-            if (win) (win as any).visible = false;
-            
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
-                GLib.spawn_command_line_async(`${home}/.config/FondosApp/FondosApp`);
-                return false;
-            });
-        }},
-    ]
-
-    actions.forEach((btnData, i) => {
-        const button = new Gtk.Button({ css_classes: ["square-btn"], width_request: 80, height_request: 80 })
-        const img = new Gtk.Image({ icon_name: btnData.icon, pixel_size: 28 })
+    const createSplitBtn = (id: string, icon: string, text: string, click: () => void) => {
+        const btn = new Gtk.Button({ css_classes: ["split-action-btn"], hexpand: true })
+        const content = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, halign: Gtk.Align.FILL, css_classes: ["split-box"] })
+        const lbl = new Gtk.Label({ label: text, css_classes: ["split-lbl"], halign: Gtk.Align.START, hexpand: true })
+        const img = new Gtk.Image({ icon_name: icon, pixel_size: 18, css_classes: ["split-img"], halign: Gtk.Align.END })
         
-        if (btnData.id === "airplane") {
+        content.append(lbl)
+        content.append(img)
+        btn.set_child(content)
+        btn.connect("clicked", click)
+        
+        if (id === "airplane") {
             airplaneIcons[gdkmonitor.connector] = img
-            airplaneButtons[gdkmonitor.connector] = button
+            airplaneButtons[gdkmonitor.connector] = btn
         }
+        return btn
+    }
 
-        button.set_child(img)
-        button.connect("clicked", btnData.click)
-        grid.attach(button, i % 3, Math.floor(i / 3), 1, 1)
+    const runClick = (cmd: string, closePanel: boolean = false) => {
+        if (closePanel) {
+            const w = windows[gdkmonitor.connector];
+            if (w) (w as any).visible = false;
+        }
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, closePanel ? 200 : 0, () => {
+            GLib.spawn_command_line_async(cmd);
+            return false;
+        });
+    }
+
+    actionsBox.append(createSplitBtn("airplane", "network-wireless-symbolic", "Avión", () => {
+        runClick(`bash ${home}/.config/ags/yuu/scripts/airplane.sh`)
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => { updateAirplaneUI(); return false })
+    }))
+
+    actionsBox.append(createSplitBtn("shot", "camera-photo-symbolic", "Foto", () => runClick("hyprshot -m region", true)))
+    actionsBox.append(createSplitBtn("wallpaper", "preferences-desktop-wallpaper-symbolic", "Fondo", () => runClick(`${home}/.config/FondosApp/FondosApp`, true)))
+
+    const actionsPage = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 10 })
+    actionsPage.append(actionsBox)
+    
+    stack.add_titled(actionsPage, "actions_page", "Acciones")
+
+    // Notifications Page — Real persistent history
+    const notifPage = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 0, css_classes: ["list-page-box"] })
+    notifPage.append(NotificationHistoryView())
+    stack.add_titled(notifPage, "notifications_page", "Notificaciones")
+
+    // Clipboard Page — Real history
+    const clipPage = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 0, css_classes: ["list-page-box"] })
+    clipPage.append(ClipboardView())
+    stack.add_titled(clipPage, "clipboard_page", "Portapapeles")
+
+    // Footer
+    const footer = new Gtk.Box({ css_classes: ["footer-row", "cc-block"], spacing: 10, homogeneous: true })
+    const footerActions = [
+        { label: "Logout", icon: "system-log-out-symbolic", cmd: `loginctl terminate-user ${loginName}` },
+        { label: "Reboot", icon: "system-reboot-symbolic", cmd: "reboot" },
+        { label: "PowerOff", icon: "system-shutdown-symbolic", cmd: "poweroff" }
+    ]
+    
+    footerActions.forEach(action => {
+        const btn = new Gtk.Button({ tooltip_text: action.label })
+        const icon = new Gtk.Image({ icon_name: action.icon, pixel_size: 20 })
+        btn.set_child(icon)
+        btn.connect("clicked", () => {
+            GLib.spawn_command_line_async(action.cmd)
+        })
+        footer.append(btn)
     })
 
-    // 5. VENTANA PRINCIPAL
+    // Window Assembling
     const win = (
         <window
             name={`control-center-${gdkmonitor.connector}`}
@@ -111,40 +189,20 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
             layer={Astal.Layer.OVERLAY}
             visible={false}
             margin_top={12}
-            margin_right={12}
+            margin_left={12}
         >
-            <box orientation={Gtk.Orientation.VERTICAL} cssClasses={["control-card"]} spacing={24}>
-                {/* HEADER */}
-                <box spacing={12} cssClasses={["control-header"]}>
-                    <box 
-                        cssClasses={["user-photo"]} 
-                        widthRequest={54} heightRequest={54}
-                        css={imageExists 
-                            ? `background-image: url("file://${userImagePath}"); background-size: contain; background-repeat: no-repeat; background-position: center;` 
-                            : `background-color: #2D2340;`}
-                    >
-                        {!imageExists && <image iconName="avatar-default-symbolic" pixelSize={26} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} hexpand />}
-                    </box>
-                    
-                    <box orientation={Gtk.Orientation.VERTICAL} valign={Gtk.Align.CENTER} hexpand>
-                        <label label="SESIÓN DE" cssClasses={["user-welcome"]} halign={Gtk.Align.START} />
-                        <label label={displayName} cssClasses={["user-name"]} halign={Gtk.Align.START} />
-                    </box>
-
-                    <box orientation={Gtk.Orientation.VERTICAL} halign={Gtk.Align.END} valign={Gtk.Align.CENTER}>
-                        <label label="ACTIVO" cssClasses={["uptime-title"]} halign={Gtk.Align.END} />
-                        {uptimeLabel}
-                    </box>
-                </box>
-
-                {grid}
-
+            <box orientation={Gtk.Orientation.VERTICAL} cssClasses={["control-card"]} spacing={12} valign={Gtk.Align.START}>
+                {header}
+                {navTabs}
+                {stackWrapper}
+                {footer}
+                
                 <button 
                     onClicked={() => { (win as any).visible = false }} 
                     cssClasses={["close-panel-btn"]} 
                     halign={Gtk.Align.CENTER}
                 >
-                    <label label="Ocultar Panel" />
+                    <label label="Cerrar Panel" />
                 </button>
             </box>
         </window>

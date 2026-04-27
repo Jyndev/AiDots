@@ -6,16 +6,16 @@
 // input_path = "/Ruta/Absoluta/A/Esta/Plantilla/ags_colors_template.scss"
 // output_path = "/Ruta/Absoluta/A/Tu/Configuracion/ags/colors.scss"
 
-$bg_color: #1a1110;             // Fondo base
-$bg_color_light: #271d1c; // Elevación y capas (Color superficie más claro)
+$bg_color: #1a1112;             // Fondo base
+$bg_color_light: #271d1e; // Elevación y capas (Color superficie más claro)
 
 // SCSS nativamente permite pasarle un HEX a rgba() con opacidad, 
 // o usar la función fade-out() / transparentize() de SASS.
-$bg_color_translucent: rgba(#1a1110, 0.6); 
+$bg_color_translucent: rgba(#1a1112, 0.6); 
 
-$fg_color: #f1dfdc;           // Texto principal (Color que contrasta con el fondo)
-$fg_color_muted: #d8c2be;// Texto secundario / muted
+$fg_color: #f0dedf;           // Texto principal (Color que contrasta con el fondo)
+$fg_color_muted: #d7c1c2;// Texto secundario / muted
 
-$accent: #ffb4a8;                   // Acento principal y títulos
-$accent_hover: #e7bdb6;           // Color de hover (Material Design 3 'secondary' o 'tertiary')
-$accent_light: #73342a;   // Contrastes oscuros (Contenedor primario)
+$accent: #ffb2b9;                   // Acento principal y títulos
+$accent_hover: #e5bdbf;           // Color de hover (Material Design 3 'secondary' o 'tertiary')
+$accent_light: #72333b;   // Contrastes oscuros (Contenedor primario)
