@@ -12,9 +12,9 @@ export function Temperature() {
 })
 
   return (
-    <box class="weather" spacing={5}>
-      <image iconName="custom-flame-symbolic" />
-        <label label={cpuTemp} class="temperature-text" />
+    <box class="system-box temperature">
+      <label label={cpuTemp} class="system-label" />
+      <image iconName="custom-flame-symbolic" class="system-icon" />
     </box>
   )
 }

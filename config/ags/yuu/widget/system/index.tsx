@@ -49,16 +49,15 @@ export function System() {
 
 
   return (
-    <box class="side" heightRequest={20} spacing={5} valign={Gtk.Align.CENTER}>
-      <box class="system-box" spacing={5}>
-        <image iconName="custom-cpu-symbolic" />
-        <label label={cpu} class="system-value" />
-        <Separator />
-        <image iconName="custom-ram-symbolic" />
-        <label label={ram} class="system-value" />
-        
+    <box class="side" spacing={6} valign={Gtk.Align.CENTER}>
+      <box class="system-box cpu">
+        <label label={cpu} class="system-label" />
+        <image iconName="custom-cpu-symbolic" class="system-icon" />
       </box>
-     
+      <box class="system-box ram">
+        <label label={ram} class="system-label" />
+        <image iconName="custom-ram-symbolic" class="system-icon" />
+      </box>
     </box>
   )
 }

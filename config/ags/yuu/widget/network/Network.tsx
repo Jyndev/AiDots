@@ -59,13 +59,12 @@ export function Network() {
 
   return (
     <box
-      cssClasses={["network-info-box"]}
+      class="system-box network-inverted"
       visible={network((v) => v !== "")}
       valign={Gtk.Align.CENTER}
-      spacing={5}
     >
       <image
-        cssClasses={["network-icon"]}
+        class="system-icon"
         iconName={network((v) =>
           v === "Modo Ninja"
             ? "custom-vpn-symbolic"
@@ -74,8 +73,8 @@ export function Network() {
       />
       <label
         label={network}
-        cssClasses={["system-value"]}
-        maxWidthChars={15}
+        class="system-label"
+        maxWidthChars={25}
         ellipsize={Pango.EllipsizeMode.END}
       />
     </box>

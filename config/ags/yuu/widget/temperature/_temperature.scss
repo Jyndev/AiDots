@@ -1,15 +1,1 @@
-@use "_colors" as col;
-@use "_constants" as con;
-
-box.weather {
-  font-family: "Fredoka";
-  background: col.$accent;
-  padding: con.$padding;
-  color: col.$bg_color;
-  border-radius: con.$radius;
-  > .temperature-text {
-    font-weight: bold;
-  }
-  
-
-}
+// Estilos centralizados en _system.scss

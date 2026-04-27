@@ -1,19 +1,100 @@
 @use "colors" as col;
 @use "constants" as con;
-.system-box {
+
+// Estilo Base con Acento a la Derecha (CPU, RAM, Temperatura)
+.system-box, .temperature {
   font-family: "Fredoka";
-  padding: con.$padding;
+  padding: 8px 10px;
+  border-radius: 50px;
+  border: none;
 
-  border-radius: con.$radius;
-  background-color: col.$bg_color;
-  > label.system-part {
-    color: col.$accent;
+  // Gradiente con corte al 55%
+  background-image: linear-gradient(105deg, col.$bg_color_light 55%, col.$accent 55%);
+
+  .system-label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 6px; 
   }
 
-  > label.system-value {
-    color: col.$accent;
+  .system-icon {
+    color: col.$bg_color;
+    -gtk-icon-size: 16px;
   }
-  > image {
+}
+
+// Estilo para Audio (Solo Texto)
+.audio {
+  font-family: "Fredoka";
+  padding: 8px 12px;
+  border-radius: 50px;
+  background-color: col.$bg_color_light;
+  border: none;
+  
+  .system-label {
     color: col.$accent;
+    font-weight: bold;
+    font-size: 0.9rem;
   }
+
+  &:hover {
+     opacity: 0.8;
+  }
+}
+
+// Estilo para Audio Invertido (Icono Ancho + Texto)
+.audio-inverted {
+  font-family: "Fredoka";
+  padding: 8px 0;
+  border-radius: 50px;
+  border: none;
+  min-width: 80px;
+
+  // Gradiente al 38% para acomodar icono de volumen ancho
+  background-image: linear-gradient(105deg, col.$accent 38%, col.$bg_color_light 38%);
+
+  .system-icon {
+    color: col.$bg_color;
+    -gtk-icon-size: 16px;
+    margin-left: 12px;
+    margin-right: 12px; 
+  }
+
+  .system-label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 15px;
+  }
+
+  &:hover { opacity: 0.8; }
+}
+
+// Estilo para Network Invertido (Icono + Nombre Largo)
+.network-inverted {
+  font-family: "Fredoka";
+  padding: 8px 0;
+  border-radius: 50px;
+  border: none;
+  min-width: 80px;
+
+  // Gradiente al 24% para maximizar espacio para el nombre de red
+  background-image: linear-gradient(105deg, col.$accent 24%, col.$bg_color_light 24%);
+
+  .system-icon {
+    color: col.$bg_color;
+    -gtk-icon-size: 16px;
+    margin-left: 12px;
+    margin-right: 12px; 
+  }
+
+  .system-label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 15px;
+  }
+
+  &:hover { opacity: 0.8; }
 }

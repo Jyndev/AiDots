@@ -99,18 +99,23 @@ popover > contents {
 }
 
 .menubutton {
-  > button {
-    border-radius: con.$radius;
-  }
-  > button > box > contents > box > label {
-    font-weight: normal;
-  }
-  > button > box > contents > box > box > label {
-    font-weight: normal;
-  }
+  padding: 0;
+  background: transparent;
+  border: none;
 
-  > button > box > contents > box > box > box > label {
-    font-weight: normal;
+  > button {
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    
+    &:hover {
+      background: transparent;
+    }
+    
+    > box {
+      padding: 0;
+    }
   }
 }
 

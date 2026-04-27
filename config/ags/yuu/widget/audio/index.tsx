@@ -38,37 +38,17 @@ export function Audio() {
     <menubutton
       hexpand={false}
       class="menubutton"
-      widthRequest={80}
       $={(self) => self.add_controller(scrollController)}
     >
-      <box halign={Gtk.Align.CENTER}>
-        <box spacing={5}>
-          <image iconName="custom-volume-med-symbolic" valign={Gtk.Align.CENTER} />
-          <label
-            label={volume.as((v) => (v * 100).toFixed(0))}
-            valign={Gtk.Align.CENTER}
-            halign={Gtk.Align.END}
-            hexpand
-            widthRequest={20}
-          />
-        </box>
-        <Separator />
-        <label
-          label={name((n) => n || "Audio")}
-          ellipsize={Pango.EllipsizeMode.END}
-          maxWidthChars={14}
+      <box class="system-box audio-inverted">
+        <image 
+          iconName="custom-volume-med-symbolic" 
+          class="system-icon" 
         />
-
-        <With value={name}>
-          {(name) =>
-            name === "Galaxy Buds FE" && (
-              <box>
-                <Separator />
-                <BudsBattery />
-              </box>
-            )
-          }
-        </With>
+        <label
+          label={volume.as((v) => (v * 100).toFixed(0) + "%")}
+          class="system-label"
+        />
       </box>
 
       <popover class="popover" hasArrow={false}>
