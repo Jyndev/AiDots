@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+  <!-- Symmetrical clean layered shadow boxes -->
+  <rect x="7" y="7" width="13" height="13" rx="2" opacity="0.35"/>
+  <rect x="4" y="4" width="13" height="13" rx="2"/>
+</svg>

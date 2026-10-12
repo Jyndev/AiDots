@@ -3,7 +3,7 @@ import { TodayStats } from "../TodayStats"
 
 export function RightIsland() {
   return (
-    <box class="island right-island" spacing={0}>
+    <box class="island right-island" spacing={0} valign={Gtk.Align.START}>
       <Gtk.DrawingArea
         widthRequest={60}
         heightRequest={60}

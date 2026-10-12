@@ -6,14 +6,15 @@ import { CenterIsland } from "./CenterIsland"
 import { Audio } from "./audio"
 import { Tray } from "./tray"
 import { System } from "./system"
-import { Network } from "./network/Network"
 import { createBinding } from "gnim"
 import { LeftIsland } from "./islands/LeftIsland"
 import { RightIsland } from "./islands/RightIsland"
 import { ControlCenterToggle } from "./control_center/ControlCenter"
+import { toggleGeminiWindow } from "./gemini/GeminiChat"
+import { toggleSettingsWindow } from "./settings/SettingsWindow"
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
-  const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor
+  const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
   return (
     <>
@@ -27,7 +28,8 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         application={app}
       >
         <centerbox cssName="bar">
-          <box $type="start">
+          {/* LADO IZQUIERDO */}
+          <box $type="start" valign={Gtk.Align.START}>
             <LeftIsland />
             <box
               class="side"
@@ -35,38 +37,51 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
               valign={Gtk.Align.CENTER}
               spacing={5}
             >
-              {/* <Workspaces /> */}
-              <ControlCenterToggle gdkmonitor={gdkmonitor} />
+              <button
+                valign={Gtk.Align.CENTER}
+                tooltipText="Abrir Google Gemini"
+                onClicked={() => {
+                  toggleGeminiWindow(gdkmonitor)
+                }}
+              >
+                <image iconName="custom-gemini-symbolic" />
+              </button>
+              <button
+                valign={Gtk.Align.CENTER}
+                tooltipText="Configuración de Hyprland"
+                onClicked={() => {
+                  toggleSettingsWindow(gdkmonitor)
+                }}
+              >
+                <image iconName="custom-hex-symbolic" />
+              </button>
               <Workspaces orientation={Gtk.Orientation.HORIZONTAL} />
               <System />
             </box>
           </box>
-          <box $type="center" class="center">
+
+          {/* CENTRO */}
+          <box $type="center" class="center" valign={Gtk.Align.START}>
             <CenterIsland />
           </box>
-          <box
-            $type="end"
-            class="side"
-            heightRequest={20}
-            valign={Gtk.Align.CENTER}
-          >
+
+          {/* LADO DERECHO: RightIsland pegado al tope y botón de centro de control a la derecha */}
+          <box $type="end" valign={Gtk.Align.START}>
             <box
               class="side"
               heightRequest={20}
               valign={Gtk.Align.CENTER}
-              spacing={5}
+              spacing={6}
             >
               {/* <Tray /> */}
               <Audio />
-              <Network />
-
+              <ControlCenterToggle gdkmonitor={gdkmonitor} />
             </box>
 
             <RightIsland />
           </box>
         </centerbox>
       </window>
-      
     </>
   )
 }

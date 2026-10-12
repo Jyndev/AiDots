@@ -1,0 +1,576 @@
+@use "colors" as col;
+
+$stripe_color: rgba(col.$accent, 0.07);
+
+window.settings-window {
+  background: transparent;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* Panel flotante de configuración: Sólido sin transparencias ni franjas */
+.settings-window-card {
+  background-color: col.$bg_color;
+  background-image: none;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 14px;
+  min-width: 440px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  font-family: "Fredoka", sans-serif;
+  font-weight: 300;
+  color: col.$fg_color;
+  transition: background-color 0.25s ease;
+
+  .settings-card {
+    background-color: col.$bg_color_light;
+    box-shadow: none;
+  }
+  .settings-search-pill {
+    background-color: col.$bg_color_light;
+  }
+  .settings-tabs-container {
+    background-color: col.$bg_color_light;
+  }
+
+  &.solid-widget {
+    background-color: col.$bg_color;
+  }
+
+  &.no-stripes {
+    background-image: none;
+  }
+}
+
+/* 1. CABECERA MODERNA SIN BORDES */
+.settings-header-box {
+  padding-bottom: 3px;
+
+  .header-badge-paw {
+    color: col.$accent;
+    -gtk-icon-size: 17px;
+    margin-right: 3px;
+  }
+
+  .settings-title {
+    font-size: 1.12rem;
+    font-weight: 600;
+    font-family: "Fredoka", sans-serif;
+    color: col.$fg_color;
+    letter-spacing: -0.2px;
+  }
+
+  .settings-subtitle {
+    font-size: 0.74rem;
+    color: col.$fg_color_muted;
+    font-family: "Fredoka", sans-serif;
+    font-weight: 300;
+  }
+
+  .settings-action-icon-btn {
+    background-color: rgba(col.$fg_color, 0.10);
+    border: none;
+    border-radius: 9999px;
+    min-width: 28px;
+    min-height: 28px;
+    padding: 0;
+    margin-right: 5px;
+    color: col.$fg_color;
+    font-size: 0.95rem;
+    box-shadow: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(col.$accent, 0.25);
+      color: col.$accent;
+      transform: rotate(90deg);
+    }
+
+    &:active {
+      transform: scale(0.92) rotate(180deg);
+    }
+  }
+
+  .settings-close-btn {
+    background-color: rgba(col.$fg_color, 0.10);
+    border: none;
+    min-width: 28px;
+    min-height: 28px;
+    padding: 0;
+    color: col.$fg_color_muted;
+    font-size: 0.85rem;
+    box-shadow: none;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(235, 87, 87, 0.35);
+      color: #ff7b7b;
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+}
+
+/* 2. BUSCADOR TRANSLÚCIDO SIN BORDES */
+.settings-search-pill {
+  background-color: rgba(col.$bg_color, 0.50);
+  border: none;
+  border-radius: 9999px;
+  padding: 2px 12px;
+  min-height: 32px;
+  box-shadow: none;
+  transition: all 0.2s ease;
+
+  entry.settings-search-input {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: col.$fg_color;
+    font-size: 0.82rem;
+    font-family: "Fredoka", sans-serif;
+    font-weight: 300;
+    padding: 0;
+    margin: 0;
+  }
+
+  .search-icon {
+    color: col.$fg_color_muted;
+    -gtk-icon-size: 13px;
+  }
+
+  &:focus-within {
+    background-color: rgba(col.$bg_color, 0.70);
+    box-shadow: none;
+  }
+}
+
+/* 3. SELECTOR DE PESTAÑAS (SEGMENTED TABS) SIN BORDES */
+.settings-tabs-container {
+  background-color: rgba(col.$bg_color, 0.40);
+  border: none;
+  border-radius: 9999px;
+  padding: 3px;
+  margin: 1px 0;
+  box-shadow: none;
+
+  button.settings-tab-btn {
+    background: transparent;
+    border: none;
+    border-radius: 9999px;
+    padding: 3px 6px;
+    min-height: 25px;
+    box-shadow: none;
+    transition: all 0.18s ease;
+
+    .tab-icon {
+      -gtk-icon-size: 12px;
+      color: col.$fg_color_muted;
+      margin-right: 2px;
+      transition: color 0.18s ease;
+    }
+
+    .tab-label {
+      font-size: 0.72rem;
+      font-weight: 400;
+      font-family: "Fredoka", sans-serif;
+      color: col.$fg_color_muted;
+      transition: color 0.18s ease;
+    }
+
+    &:hover {
+      background-color: rgba(col.$accent, 0.15);
+
+      .tab-icon, .tab-label {
+        color: col.$fg_color;
+      }
+    }
+
+    &.active {
+      background-color: col.$accent;
+      box-shadow: none;
+
+      .tab-icon, .tab-label {
+        color: col.$bg_color;
+        font-weight: 600;
+      }
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+}
+
+/* 4. CONTENEDOR DE SCROLL SUAVE Y MINIMALISTA */
+.settings-scroll-view {
+  padding: 2px 0;
+
+  scrollbar {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    &.vertical {
+      min-width: 4px;
+
+      trough {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+
+      slider {
+        min-width: 4px;
+        border-radius: 9999px;
+        background-color: rgba(col.$accent, 0.22);
+        border: none;
+        box-shadow: none;
+        transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+
+        &:hover {
+          background-color: rgba(col.$accent, 0.60);
+          min-width: 6px;
+        }
+      }
+    }
+  }
+}
+
+.settings-flow {
+  padding: 2px 0 8px 0;
+}
+
+/* 5. TARJETAS DE SECCIÓN SIN BORDES (VIDRIO ESMERILADO CÁLIDO) */
+.settings-card {
+  background-color: rgba(col.$bg_color_light, 0.88);
+  border-radius: 16px;
+  padding: 10px 12px;
+  box-shadow: none;
+  border: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(col.$bg_color_light, 0.95);
+    box-shadow: none;
+  }
+
+  .card-header-compact {
+    padding-bottom: 2px;
+  }
+
+  /* Badge de Icono Centrado */
+  .section-badge-icon {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 8px;
+    background-color: rgba(col.$accent, 0.18);
+    border: none;
+    padding: 0;
+    margin: 0;
+
+    image {
+      color: col.$accent;
+      -gtk-icon-size: 16px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .section-title {
+    font-size: 0.86rem;
+    font-weight: 500;
+    font-family: "Fredoka", sans-serif;
+    color: col.$fg_color;
+  }
+
+  /* Grupos de Pills / Presets */
+  .preset-pill-group {
+    margin: 0;
+    padding: 0;
+
+    button.preset-pill {
+      background-color: rgba(col.$fg_color, 0.08);
+      border: none;
+      border-radius: 9999px;
+      padding: 1px 9px;
+      margin: 0 1px;
+      min-height: 20px;
+      box-shadow: none;
+      transition: all 0.18s ease;
+
+      label {
+        font-size: 0.68rem;
+        font-weight: 400;
+        font-family: "Fredoka", sans-serif;
+        color: col.$fg_color_muted;
+        margin: 0;
+        padding: 0;
+      }
+
+      &:hover {
+        background-color: rgba(col.$accent, 0.22);
+
+        label {
+          color: col.$fg_color;
+        }
+      }
+
+      &.selected {
+        background-color: col.$accent;
+        box-shadow: 0 1px 6px rgba(col.$accent, 0.35);
+
+        label {
+          color: col.$bg_color;
+          font-weight: 600;
+        }
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
+
+/* 6. DISTRIBUCIÓN COMPACTA EN CUADRÍCULA (DUAL ROW & HALF COL) */
+.setting-dual-row {
+  padding: 2px 0;
+}
+
+.setting-half-col {
+  padding: 0;
+}
+
+.setting-single-col {
+  padding: 2px 0;
+}
+
+.row-label {
+  font-size: 0.80rem;
+  font-weight: 300;
+  font-family: "Fredoka", sans-serif;
+  color: col.$fg_color;
+}
+
+.row-sublabel {
+  font-size: 0.68rem;
+  font-weight: 300;
+  font-family: "Fredoka", sans-serif;
+  color: col.$fg_color_muted;
+}
+
+.row-label-mini {
+  font-size: 0.74rem;
+  font-weight: 300;
+  font-family: "Fredoka", sans-serif;
+  color: col.$fg_color;
+}
+
+.setting-row-inline {
+  padding: 3px 0;
+}
+
+/* Badge de valor numérico estilo chip sin borde */
+.setting-value-badge {
+  background-color: rgba(col.$accent, 0.18);
+  border: none;
+  border-radius: 9999px;
+  padding: 0 7px;
+  min-height: 17px;
+
+  .value-text {
+    font-size: 0.67rem;
+    font-weight: 500;
+    font-family: "Fredoka", sans-serif;
+    color: col.$accent;
+  }
+}
+
+/* 7. SELECTOR SEGMENTADO SIN BORDES */
+.segmented-selector {
+  background-color: rgba(col.$bg_color, 0.50);
+  border-radius: 9999px;
+  padding: 2px;
+  margin: 0;
+  border: none;
+  box-shadow: none;
+
+  button.segment-btn {
+    background: transparent;
+    border: none;
+    border-radius: 9999px;
+    padding: 1px 9px;
+    margin: 0;
+    min-height: 20px;
+    box-shadow: none;
+    transition: all 0.18s ease;
+
+    label {
+      font-size: 0.69rem;
+      font-weight: 400;
+      font-family: "Fredoka", sans-serif;
+      color: col.$fg_color_muted;
+      margin: 0;
+      padding: 0;
+    }
+
+    &:hover {
+      background-color: rgba(col.$accent, 0.18);
+
+      label {
+        color: col.$fg_color;
+      }
+    }
+
+    &.selected {
+      background-color: col.$accent;
+      box-shadow: none;
+
+      label {
+        color: col.$bg_color;
+        font-weight: 600;
+      }
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+/* 8. BOTONES DE ACCIÓN RÁPIDA SIN BORDES */
+button.action-card-btn {
+  border-radius: 10px;
+  padding: 6px 10px;
+  min-height: 34px;
+  box-shadow: none;
+  border: none;
+  transition: all 0.18s ease;
+
+  .btn-text {
+    font-size: 0.76rem;
+    font-weight: 500;
+    font-family: "Fredoka", sans-serif;
+  }
+
+  &.primary {
+    background-color: rgba(col.$accent, 0.18);
+    color: col.$accent;
+
+    &:hover {
+      background-color: col.$accent;
+      color: col.$bg_color;
+      box-shadow: none;
+    }
+  }
+
+  &.danger {
+    background-color: rgba(235, 87, 87, 0.16);
+    color: #ff8a80;
+
+    &:hover {
+      background-color: #eb5757;
+      color: #ffffff;
+      box-shadow: none;
+    }
+  }
+
+  &.subtle {
+    background-color: rgba(col.$fg_color, 0.08);
+    color: col.$fg_color_muted;
+    margin-top: 3px;
+
+    &:hover {
+      background-color: rgba(col.$accent, 0.15);
+      color: col.$fg_color;
+    }
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* 9. SLIDERS COMPACTOS ESTILO OSU! SIN BORDES EXTERNOS */
+.settings-card .astal-slider {
+  padding: 2px 0;
+
+  trough {
+    min-height: 5px;
+    border-radius: 9999px;
+    background-color: rgba(col.$bg_color, 0.65);
+    border: none;
+    box-shadow: none;
+
+    highlight {
+      min-height: 5px;
+      border-radius: 9999px;
+      background-image: linear-gradient(90deg, col.$accent_light 0%, col.$accent 100%);
+      box-shadow: none;
+    }
+  }
+
+  slider {
+    min-width: 14px;
+    min-height: 14px;
+    border-radius: 9999px;
+    background-color: #ffffff;
+    border: none;
+    box-shadow: none;
+    margin: -4px 0;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background-color: #ffffff;
+      box-shadow: none;
+      transform: scale(1.1);
+    }
+
+    &:active {
+      background-color: col.$accent;
+      box-shadow: none;
+    }
+  }
+}
+
+/* 10. SWITCHES COMPACTOS SIN BORDES */
+switch {
+  border-radius: 9999px;
+  min-width: 34px;
+  min-height: 18px;
+  background-color: rgba(col.$fg_color, 0.16);
+  border: none;
+  outline: none;
+  padding: 2px;
+  margin: 0;
+  box-shadow: none;
+  transition: all 0.2s ease;
+
+  slider {
+    border-radius: 9999px;
+    min-width: 14px;
+    min-height: 14px;
+    background-color: col.$fg_color_muted;
+    border: none;
+    outline: none;
+    margin: 0;
+    box-shadow: none;
+    transition: all 0.2s ease;
+  }
+
+  &:checked {
+    background-color: col.$accent;
+    border: none;
+    box-shadow: none;
+
+    slider {
+      background-color: col.$bg_color;
+      border: none;
+    }
+  }
+}

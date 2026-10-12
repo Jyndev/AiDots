@@ -1,15 +1,39 @@
 @use "_colors" as col;
+
 box.mpris {
   font-size: 1rem;
   font-family: "Fredoka";
 }
 
-.song-artist {
-  font-size: 0.9rem;
-  color: col.$accent;
-}
 .song-title {
-  margin-bottom: 4px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: col.$fg_color;
+}
+
+.song-artist-inline {
+  font-size: 0.80rem;
+  font-weight: 400;
+  color: col.$fg_color_muted;
+  opacity: 0.85;
+}
+
+.song-artist {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: col.$accent;
+  opacity: 0.95;
+  margin-top: 1px;
+}
+
+.mpris-lyrics {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: col.$accent;
+  font-family: "Fredoka", sans-serif;
+  line-height: 1.1;
+  margin-top: 1px;
+  margin-bottom: 2px;
 }
 
 .cover-art {
@@ -19,4 +43,9 @@ box.mpris {
 .progress-bar {
   background: col.$accent_light;
   color: col.$accent; 
+  margin-top: 2px;
+}
+
+.mpris-controls {
+  margin-left: 4px;
 }

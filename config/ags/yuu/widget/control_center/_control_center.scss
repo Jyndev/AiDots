@@ -1,318 +1,622 @@
 @use "colors" as col;
 
-// Mapeo dinámico usando la plantilla _colors.scss
-$cc_border: rgba(col.$accent, 0.3);
-$cc_radius: 20px;
+$stripe_color: rgba(col.$accent, 0.07);
 
-$cc_primary: col.$accent;
-$cc_secondary: col.$fg_color;
-$cc_active_bg: rgba(col.$accent, 0.2);
+window.control-center,
+window.clipboard-window {
+  background: transparent;
+}
 
-button {
-  outline: none;
+/* ── PANEL FLOTANTE DEL CENTRO DE CONTROL: SÓLIDO SIN TRANSPARENCIA NI FRANJAS ── */
+.control-center-drawer,
+.clipboard-window-drawer {
+  background-color: col.$bg_color;
+  background-image: none;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 14px;
+  min-width: 350px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  font-family: "Fredoka", sans-serif;
+  font-weight: 300;
+  color: col.$fg_color;
+  transition: background-color 0.25s ease;
+
+  .cc-notif-card {
+    background-color: col.$bg_color_light;
+  }
+  .cc-quick-pill:not(.active) {
+    background-color: col.$bg_color_light;
+  }
+  .cc-calendar-wrapper {
+    background-color: col.$bg_color_light;
+  }
+  .cc-volume-pill {
+    background-color: col.$bg_color_light;
+  }
+
+  &.solid-widget {
+    background-color: col.$bg_color;
+  }
+
+  &.no-stripes {
+    background-image: none;
+  }
+}
+
+/* ── 1. CABECERA SUPERIOR Y UPTIME CHIP ── */
+.cc-topbar-row {
+  padding-bottom: 2px;
+
+  .cc-uptime-chip {
+    background-color: rgba(col.$bg_color_light, 0.75);
+    border-radius: 9999px;
+    padding: 4px 11px;
+    box-shadow: none;
+    border: none;
+    transition: all 0.2s ease;
+
+    .uptime-icon {
+      color: col.$accent;
+    }
+
+    .uptime-text {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: col.$fg_color;
+      letter-spacing: -0.2px;
+    }
+
+    &:hover {
+      background-color: rgba(col.$bg_color_light, 0.90);
+      box-shadow: none;
+    }
+  }
+
+  /* Botones circulares superiores */
+  button.cc-topbar-btn {
+    background-color: rgba(col.$bg_color_light, 0.72);
+    border: none;
+    border-radius: 9999px;
+    min-width: 30px;
+    min-height: 30px;
+    padding: 0;
+    box-shadow: none;
+    color: col.$fg_color_muted;
+    transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+
+    image {
+      color: col.$fg_color_muted;
+      transition: color 0.18s ease;
+    }
+
+    &:hover {
+      background-color: rgba(col.$accent, 0.20);
+      color: col.$accent;
+      box-shadow: none;
+      transform: translateY(-1px);
+
+      image {
+        color: col.$accent;
+      }
+    }
+
+    &.power-off-btn:hover {
+      background-color: rgba(239, 68, 68, 0.25);
+      color: #ff6b6b;
+      box-shadow: none;
+
+      image {
+        color: #ff6b6b;
+      }
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+}
+
+/* ── 2. SLIDER DE VOLUMEN (ANCHO COMPLETO) ── */
+.cc-volume-pill {
+  background-color: rgba(col.$bg_color_light, 0.72);
+  border: none;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  min-height: 34px;
   box-shadow: none;
+  transition: all 0.2s ease;
 
-  &:focus {
-    outline: none;
+  &:hover {
+    background-color: rgba(col.$bg_color_light, 0.88);
     box-shadow: none;
   }
 
-  &:active {
-    background-image: none;
-    background-color: $cc_active_bg;
-  }
-}
+  .cc-slider-icon-btn {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    min-width: 22px;
+    min-height: 22px;
+    color: col.$accent;
 
-.control-card {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  min-width: 350px;
-}
-
-.cc-block {
-  background-color: col.$bg_color;
-  border-radius: $cc_radius;
-  padding: 15px;
-}
-
-.control-header {
-  .user-photo {
-    background-color: transparent;
-    border-radius: 50%;
-    border: 2px solid $cc_border;
+    image {
+      color: col.$accent;
+    }
   }
 
-  .user-name {
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
+  .cc-slider-bar-track {
+    background-color: rgba(col.$fg_color, 0.12);
+    border-radius: 9999px;
+    min-height: 8px;
+    padding: 2px;
+
+    .cc-slider-bar-fill {
+      background-color: col.$accent;
+      border-radius: 9999px;
+      min-height: 6px;
+      box-shadow: none;
+      transition: min-width 0.15s ease;
+    }
   }
 
-  .uptime-title {
+  .cc-slider-pct {
+    font-size: 0.72rem;
+    font-weight: 700;
     color: col.$fg_color_muted;
-    font-size: 11px;
+    min-width: 28px;
   }
 }
 
-.user-info-pill {
-  background-color: col.$bg_color;
-  border-radius: 50px;
-  padding: 8px 30px;
-  margin-top: -5px; // Se acerca ligeramente a la imagen superior
+/* ── 3. ACCIONES RÁPIDAS (WI-FI Y CAPTURA COMPACTOS) ── */
+.cc-quick-row {
+  padding: 1px 0;
 }
 
-.nav-tabs {
-  margin: 0;
-  padding: 6px;
-  background-color: col.$bg_color;
-  border-radius: 50px;
-  
-  // Customizar StackSwitcher usualmente requiere estilos específicos
-  button {
-    color: white;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: $cc_radius;
-    background-color: transparent;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-    
-    &:checked {
-      background: linear-gradient(135deg, $cc_primary, $cc_secondary);
-      color: #121212;
-    }
-  }
-}
-
-.content-area-stack {
-  // Ahora manejado por su contenedor cc-block
-}
-
-.list-page-box {
-  min-height: 250px;
-}
-
-.section-title {
-  color: $cc_primary;
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.toggle-btn-row, .segmented-control {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: $cc_radius;
-  padding: 4px;
-  
-  button {
-    color: white;
-    border-radius: $cc_radius;
-    padding: 6px 12px;
-    
-    &:hover { background-color: rgba(255, 255, 255, 0.1); }
-    &.active {
-      background-color: $cc_primary;
-      color: #121212;
-    }
-  }
-}
-
-.theme-grid-action {
-  button {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: white;
-    min-height: 40px;
-    font-size: 12px;
-    
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-      border-color: $cc_secondary;
-    }
-  }
-}
-
-.split-action-row {
-  // Sin margen, el wrapper controla todo
-}
-
-.split-action-btn {
-  border-radius: 50px;
-  box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
+button.cc-quick-pill {
+  background-color: rgba(col.$bg_color_light, 0.72);
   border: none;
-  min-height: 40px;
-  padding: 0;
-  background-color: transparent; // Prevents solid color override from GTK
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 14px;
+  padding: 6px 12px;
+  min-height: 38px;
+  box-shadow: none;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
 
-  background-image: linear-gradient(105deg, white 65%, $cc_primary 65%);
-  .split-lbl { color: col.$bg_color; transition: color 0.3s; }  // bg oscuro sobre blanco = contraste perfecto
-  .split-img { color: white; transition: color 0.3s; }
+  .pill-main-icon {
+    color: col.$fg_color_muted;
+    transition: color 0.18s ease;
+  }
+
+  .pill-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: col.$fg_color;
+    letter-spacing: -0.2px;
+  }
+
+  .pill-sub {
+    font-size: 0.64rem;
+    font-weight: 500;
+    color: col.$fg_color_muted;
+  }
+
+  &:hover {
+    background-color: rgba(col.$bg_color_light, 0.88);
+    box-shadow: none;
+    transform: translateY(-1px);
+
+    .pill-main-icon {
+      color: col.$accent;
+    }
+  }
+
+  &.screenshot-pill:hover {
+    background-color: rgba(col.$accent, 0.18);
+    border: none;
+    box-shadow: none;
+  }
 
   &.active {
-    background-image: linear-gradient(105deg, $cc_primary 65%, white 65%);
-    .split-lbl { color: white; }
-    .split-img { color: $cc_primary; }
+    background-color: col.$accent;
+    border: none;
+    box-shadow: none;
+
+    .pill-main-icon {
+      color: col.$bg_color;
+    }
+
+    .pill-title {
+      color: col.$bg_color;
+      font-weight: 700;
+    }
+
+    .pill-sub {
+      color: rgba(col.$bg_color, 0.85);
+      font-weight: 600;
+    }
 
     &:hover {
-      background-image: linear-gradient(105deg, $cc_primary 65%, white 65%);
-      background-color: transparent;
-      opacity: 0.85;
-      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+      background-color: col.$accent_hover;
+      box-shadow: none;
     }
   }
 
-  &:hover {
-    background-image: linear-gradient(105deg, white 65%, $cc_primary 65%);
-    background-color: transparent;
-    opacity: 0.85;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+  &:active {
+    transform: scale(0.96);
   }
 }
 
-// Estructura interna del botón (Box)
-.split-box {
-  // layout controlado por padding/margenes interos
-}
+/* ── 4. SECCIÓN CENTRAL: NOTIFICACIONES ── */
+.cc-notifs-section {
+  background-color: rgba(col.$bg_color, 0.25);
+  border-radius: 20px;
+  padding: 6px;
+  border: none;
 
-.split-lbl {
-  font-weight: 800;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-left: 12px;
-}
-
-.split-img {
-  margin-right: 12px;
-}
-
-.footer-row {
-  button {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: $cc_radius;
-    color: $cc_secondary;
-    padding: 10px;
-    
-    &:hover {
-      background-color: $cc_active_bg;
-      color: white;
+  .cc-notifs-scroll {
+    scrollbar {
+      background: transparent;
+      border: none;
+      slider {
+        background-color: rgba(col.$accent, 0.20);
+        border-radius: 9999px;
+        min-width: 4px;
+      }
     }
-    
-    image { color: $cc_secondary; }
+  }
+
+  .cc-notifs-flow {
+    padding: 2px 0;
+  }
+
+  /* Tarjeta de notificación individual */
+  .cc-notif-card {
+    background-color: rgba(col.$bg_color_light, 0.72);
+    border: none;
+    border-radius: 16px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    box-shadow: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(col.$bg_color_light, 0.86);
+      box-shadow: none;
+      transform: translateY(-1px);
+    }
+
+    .cc-notif-avatar {
+      border-radius: 9999px;
+      background-color: rgba(col.$accent, 0.16);
+      color: col.$accent;
+    }
+
+    .cc-notif-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: col.$fg_color;
+      letter-spacing: -0.2px;
+    }
+
+    .cc-notif-time {
+      font-size: 0.68rem;
+      color: col.$fg_color_muted;
+    }
+
+    .cc-notif-body {
+      font-size: 0.74rem;
+      color: col.$fg_color_muted;
+      line-height: 1.25;
+    }
+
+    .cc-notif-dismiss-btn {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      color: col.$fg_color_muted;
+      border-radius: 9999px;
+      min-width: 22px;
+      min-height: 22px;
+      padding: 0;
+      transition: all 0.15s ease;
+
+      &:hover {
+        background-color: rgba(239, 68, 68, 0.25);
+        color: #ff6b6b;
+      }
+    }
+  }
+
+  .cc-notifs-empty {
+    padding: 24px 0;
+    label {
+      font-size: 0.80rem;
+      color: col.$fg_color_muted;
+    }
+  }
+
+  /* Barra inferior de notificaciones (Píldora con campana, contador y papelera) */
+  .cc-notifs-footer-bar {
+    background-color: rgba(col.$bg_color_light, 0.72);
+    border: none;
+    border-radius: 9999px;
+    padding: 6px 14px;
+    margin-top: 4px;
+    box-shadow: none;
+
+    .notifs-bell-icon {
+      color: col.$accent;
+    }
+
+    .notifs-count-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: col.$fg_color;
+    }
+
+    .notifs-clear-trash-btn {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 2px 4px;
+      color: col.$fg_color_muted;
+      border-radius: 9999px;
+      transition: all 0.18s ease;
+
+      &:hover {
+        background-color: rgba(239, 68, 68, 0.25);
+        color: #ff6b6b;
+      }
+
+      &:active {
+        transform: scale(0.92);
+      }
+    }
   }
 }
 
-.list-item-box {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 10px;
-  margin-bottom: 10px;
-
-  label { color: white; }
-}
-
-.close-panel-btn {
-  margin-top: 0;
-  color: white;
-  opacity: 0.5;
-  transition: 0.2s all;
-  
-  &:hover {
-    opacity: 1;
-    color: $cc_primary;
-  }
-}
-
-// ── Notification History Panel ─────────────────────────────────────────────
-
-.history-topbar {
-  padding: 4px 2px 8px 2px;
-}
-
-.history-title {
-  color: col.$fg_color;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.history-clear-btn {
-  background-color: rgba(col.$accent, 0.1);
-  border-radius: 50px;
-  border: 1px solid rgba(col.$accent, 0.2);
-  padding: 2px 10px;
-  color: col.$accent;
-  font-size: 12px;
-  transition: 0.2s all;
-
-  image { color: col.$accent; }
-
-  &:hover {
-    background-color: rgba(col.$accent, 0.25);
-  }
-}
-
-.history-pill {
-  background-color: col.$bg_color_light;
-  border-radius: 35px;
-  padding: 10px 16px;
-  min-height: 60px;
-  border: 1px solid rgba(col.$fg_color_muted, 0.12);
-  transition: 0.2s all;
-
-  &:hover {
-    border-color: rgba(col.$accent, 0.3);
-  }
-}
-
-.history-delete-btn {
-  background: transparent;
+/* ── 5. SECCIÓN INFERIOR: CALENDARIO ── */
+.cc-calendar-section {
+  background-color: rgba(col.$bg_color, 0.25);
+  border-radius: 20px;
+  padding: 10px 14px;
+  border: none;
   box-shadow: none;
-  min-width: 26px;
-  min-height: 26px;
-  border-radius: 50%;
-  padding: 0;
-  transition: 0.2s all;
 
-  image { color: col.$fg_color_muted; }
+  /* Cabecera del mes */
+  .cc-cal-header {
+    padding-bottom: 6px;
 
-  &:hover {
-    background-color: rgba(255, 0, 0, 0.15);
-    image { color: #ff6b6b; }
+    .cc-cal-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: col.$fg_color;
+      letter-spacing: -0.2px;
+    }
+
+    .cc-cal-nav-btn {
+      background-color: rgba(col.$fg_color, 0.10);
+      border: none;
+      border-radius: 9999px;
+      min-width: 28px;
+      min-height: 28px;
+      padding: 0;
+      color: col.$fg_color;
+      box-shadow: none;
+      transition: all 0.18s ease;
+
+      .cal-nav-arrow {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: col.$fg_color;
+        line-height: 1;
+        margin-bottom: 2px;
+      }
+
+      &:hover {
+        background-color: col.$accent;
+        box-shadow: none;
+
+        .cal-nav-arrow {
+          color: col.$bg_color;
+        }
+      }
+
+      &:active {
+        transform: scale(0.92);
+      }
+    }
+  }
+
+  /* Cabecera de días de la semana */
+  .cc-cal-weekdays {
+    padding: 4px 0;
+
+    .weekday-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: col.$fg_color_muted;
+      min-width: 32px;
+    }
+  }
+
+  /* Matriz de días a todo el ancho */
+  .cc-cal-matrix {
+    padding-top: 2px;
+
+    .cc-cal-day-cell {
+      background: transparent;
+      border: none;
+      border-radius: 9999px;
+      min-width: 34px;
+      min-height: 34px;
+      padding: 0;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: col.$fg_color;
+      box-shadow: none;
+      transition: all 0.18s ease;
+
+      &:hover {
+        background-color: rgba(col.$accent, 0.18);
+        color: col.$accent;
+      }
+
+      &.muted-day {
+        color: rgba(col.$fg_color, 0.26);
+      }
+
+      /* Día de hoy: Píldora de color verde/acento brillante como en la captura */
+      &.today-cell {
+        background-color: col.$accent;
+        color: col.$bg_color;
+        font-weight: 700;
+        box-shadow: none;
+
+        &:hover {
+          background-color: col.$accent_hover;
+          box-shadow: none;
+        }
+      }
+    }
   }
 }
 
-.history-empty {
-  color: col.$fg_color_muted;
-  font-size: 13px;
-  padding: 30px 0;
-}
+/* ── 6. ESTILOS COMPARTIDOS CON HISTORIAL & MODAL PORTAPAPELES ── */
+.history-pill {
+  background-color: rgba(col.$bg_color_light, 0.72);
+  border: none;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  box-shadow: none;
+  transition: all 0.18s ease;
 
-// ── Clipboard Specifics ──────────────────────────────────────────────────
+  .avatar {
+    border-radius: 10px;
+    background-color: rgba(col.$accent, 0.18);
+    color: col.$accent;
+  }
 
-.clip-pill {
-  // Hereda de history-pill
-  .clip-icon {
-    background-color: rgba(col.$accent, 0.1);
-    border-radius: 12px;
-    image { color: col.$accent; }
+  .action-text {
+    font-size: 0.82rem;
+    color: col.$fg_color;
+    line-height: 1.25;
+  }
+
+  .timestamp {
+    font-size: 0.70rem;
+    color: col.$fg_color_muted;
+  }
+
+  .category-badge {
+    background-color: rgba(col.$accent, 0.20);
+    border-radius: 9999px;
+    padding: 1px 7px;
+
+    label {
+      font-size: 0.68rem;
+      color: col.$accent;
+      font-weight: 600;
+    }
+  }
+
+  .history-delete-btn {
+    background: transparent;
+    border: none;
+    color: col.$fg_color_muted;
+    padding: 4px;
+    border-radius: 6px;
+    box-shadow: none;
+
+    &:hover {
+      color: #ff6b6b;
+      background-color: rgba(235, 87, 87, 0.25);
+    }
+  }
+
+  &:hover {
+    background-color: rgba(col.$bg_color_light, 0.85);
+    box-shadow: none;
+    transform: translateY(-1px);
   }
 }
 
 .clip-text-btn {
   background: transparent;
+  border: none;
   box-shadow: none;
   padding: 0;
-  border-radius: $cc_radius;
-  transition: 0.2s all;
+  margin: 0;
+}
 
-  &:hover {
-    background-color: rgba(col.$accent, 0.05);
-    label { color: col.$accent; }
+.history-topbar {
+  padding-bottom: 6px;
+
+  .history-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: col.$fg_color;
+  }
+
+  .history-clear-btn {
+    background-color: rgba(col.$fg_color, 0.08);
+    border: none;
+    border-radius: 9999px;
+    padding: 4px 12px;
+    color: col.$fg_color_muted;
+    font-size: 0.74rem;
+    font-weight: 500;
+    box-shadow: none;
+    transition: all 0.18s ease;
+
+    &:hover {
+      background-color: rgba(235, 87, 87, 0.25);
+      color: #ff7b7b;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.cc-header-row {
+  padding-bottom: 4px;
+
+  .cc-title {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: col.$fg_color;
+    letter-spacing: -0.3px;
+  }
+
+  .cc-subtitle {
+    font-size: 0.76rem;
+    color: col.$fg_color_muted;
+    font-weight: 400;
+  }
+
+  .cc-close-btn {
+    background-color: rgba(col.$fg_color, 0.10);
+    border: none;
+    min-width: 28px;
+    min-height: 28px;
+    padding: 0;
+    color: col.$fg_color_muted;
+    font-size: 0.90rem;
+    box-shadow: none;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(235, 87, 87, 0.35);
+      color: #ff7b7b;
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
   }
 }

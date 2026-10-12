@@ -1,0 +1,459 @@
+@use "colors" as col;
+
+$stripe_color: rgba(col.$accent, 0.07);
+
+window.gemini-chat {
+  background: transparent;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* Panel flotante de Gemini: Sólido sin transparencias ni franjas */
+.ai-window-card {
+  background-color: col.$bg_color;
+  background-image: none;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 18px 12px 18px;
+  min-width: 430px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  font-family: "Fredoka", sans-serif;
+  font-weight: 300;
+  color: col.$fg_color;
+  transition: background-color 0.25s ease;
+
+  .ai-chat-card {
+    background-color: col.$bg_color_light;
+  }
+  .ai-model-menu {
+    background-color: col.$bg_color_light;
+  }
+
+  &.solid-widget {
+    background-color: col.$bg_color;
+  }
+
+  &.no-stripes {
+    background-image: none;
+  }
+}
+
+/* 1. TABS SUPERIORES */
+.ai-top-tabs {
+  padding-bottom: 6px;
+  border-bottom: none;
+
+  .ai-tab {
+    padding-bottom: 4px;
+
+    .ai-tab-icon {
+      -gtk-icon-size: 14px;
+      color: col.$accent;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ai-tab-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: col.$accent;
+      margin-left: 2px;
+      padding: 0;
+    }
+
+    &.active {
+      border-bottom: none;
+    }
+  }
+
+  .ai-close-btn {
+    background: transparent;
+    border: none;
+    padding: 2px 8px;
+    color: col.$fg_color_muted;
+    font-size: 0.95rem;
+    box-shadow: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(235, 87, 87, 0.3);
+      color: #ff6b6b;
+    }
+  }
+}
+
+/* 2. SELECTOR DE MODELO (Botón cápsula y menú desplegable) */
+button.ai-model-capsule-btn {
+  background-color: #171a28; // Sólido
+  border: none;
+  border-radius: 9999px;
+  padding: 3px 12px;
+  box-shadow: none;
+  transition: all 0.2s ease;
+
+  .capsule-symbol {
+    font-size: 0.85rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .capsule-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: col.$fg_color;
+    margin-left: 2px;
+    padding: 0;
+  }
+
+  .capsule-chevron {
+    font-size: 0.65rem;
+    color: col.$accent;
+    margin-left: 2px;
+  }
+
+  &:hover {
+    background-color: #1d2235;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* Menú desplegable flotante de modelos */
+.ai-model-dropdown {
+  background-color: #131520; // 100% Sólido sin transparencia
+  border: none;
+  border-radius: 14px;
+  padding: 6px;
+  min-width: 320px;
+  box-shadow: none;
+  margin-top: 2px;
+
+  button.ai-model-option {
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    padding: 7px 12px;
+    box-shadow: none;
+    transition: all 0.15s ease;
+
+    .option-symbol {
+      font-size: 0.95rem;
+      min-width: 18px;
+    }
+
+    .option-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: col.$fg_color;
+    }
+
+    .option-desc {
+      font-size: 0.70rem;
+      color: col.$fg_color_muted;
+    }
+
+    .option-check {
+      font-size: 0.90rem;
+      font-weight: 800;
+      color: col.$accent;
+    }
+
+    &:hover {
+      background-color: #1c2132;
+    }
+
+    &.selected {
+      background-color: #1a2236;
+      border: none;
+
+      .option-title {
+        color: col.$accent;
+      }
+    }
+  }
+}
+
+/* 3. HERO HEADER CENTRADO COMPACTO */
+.ai-hero-header {
+  padding: 4px 0 2px 0;
+  margin-bottom: 4px;
+
+  .ai-hero-avatar-ring {
+    padding: 11px;
+    border-radius: 9999px;
+    background-color: #122838; // Sólido
+    border: none;
+    margin-bottom: 3px;
+
+    .ai-hero-avatar-icon {
+      color: col.$accent;
+      -gtk-icon-size: 24px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .ai-hero-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: col.$fg_color;
+  }
+
+  .ai-hero-subtitle {
+    font-size: 0.70rem;
+    color: col.$fg_color_muted;
+  }
+}
+
+/* 4. HISTORIAL DE MENSAJES */
+.ai-scroll-view {
+  padding: 2px;
+}
+
+.ai-messages-flow {
+  padding: 2px 0;
+}
+
+/* ── FORMATO CHAT: Burbujas sólidas sin transparencia ── */
+.ai-msg-group {
+  margin: 6px 0;
+
+  .ai-author-badge {
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 0.70rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  /* USUARIO: A la derecha con fondo azul oscuro sólido */
+  &.user-group {
+    margin-left: 45px;
+
+    .user-badge {
+      background-color: #0d4a66; // Sólido
+      color: #bae6fd;
+    }
+
+    .user-bubble {
+      background-color: #0e374d; // 100% Sólido sin transparencia
+      border-radius: 16px 16px 4px 16px;
+      padding: 9px 14px;
+      box-shadow: none;
+
+      .user-body {
+        font-size: 0.90rem;
+        color: #ffffff;
+        line-height: 1.35;
+      }
+    }
+  }
+
+  /* GEMINI: A la izquierda con fondo gris carbón sólido */
+  &.model-group {
+    margin-right: 35px;
+
+    .model-badge {
+      background-color: #202434; // Sólido
+      color: col.$accent;
+    }
+
+    .model-bubble {
+      background-color: #141724; // 100% Sólido sin transparencia
+      border-radius: 16px 16px 16px 4px;
+      padding: 10px 14px;
+      box-shadow: none;
+
+      .ai-markdown-text {
+        font-size: 0.88rem;
+        color: col.$fg_color;
+        line-height: 1.35;
+      }
+    }
+  }
+}
+
+/* Burbujas de sistema */
+.ai-system-row {
+  margin: 6px 0;
+
+  .system-bubble {
+    background-color: #171a28; // Sólido
+    border-radius: 10px;
+    padding: 6px 14px;
+    box-shadow: none;
+
+    .ai-system-text {
+      font-size: 0.78rem;
+      color: col.$fg_color_muted;
+      line-height: 1.25;
+    }
+  }
+}
+
+/* Bloques de código multilínea (sólidos y redondeados) */
+.ai-code-card {
+  background-color: #0a0b12; // 100% sólido ultra oscuro
+  border: none;
+  border-radius: 12px;
+  margin: 6px 0;
+  padding: 8px 12px;
+  box-shadow: none;
+
+  .ai-code-header {
+    padding-bottom: 5px;
+    border-bottom: none;
+
+    .ai-code-lang {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: col.$accent;
+      font-family: monospace;
+    }
+
+    .ai-code-copy-btn {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 2px 6px;
+
+      .ai-copy-icon {
+        color: col.$fg_color_muted;
+        -gtk-icon-size: 13px;
+      }
+
+      .ai-copy-label {
+        font-size: 0.72rem;
+        color: col.$fg_color_muted;
+        font-weight: 500;
+      }
+
+      &:hover {
+        .ai-copy-icon, .ai-copy-label {
+          color: col.$accent;
+        }
+      }
+    }
+  }
+
+  .ai-code-content {
+    padding-top: 5px;
+
+    .ai-code-lines {
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: rgba(col.$fg_color_muted, 0.45);
+      line-height: 1.35;
+      padding-right: 10px;
+      border-right: none;
+    }
+
+    .ai-code-text {
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: #93c5fd;
+      line-height: 1.35;
+    }
+  }
+}
+
+/* Pensando... */
+.ai-thinking-box {
+  margin: 6px 0;
+  opacity: 0.9;
+
+  .thinking-spinner {
+    color: col.$accent;
+    -gtk-icon-size: 15px;
+  }
+
+  .thinking-label {
+    font-size: 0.82rem;
+    font-style: italic;
+    color: col.$accent;
+  }
+}
+
+/* 5. CHIPS DE ACCIONES RÁPIDAS (/key y /clear) */
+.ai-quick-chips {
+  padding-top: 4px;
+
+  .ai-chip {
+    background-color: #171a28; // Sólido
+    border: none;
+    border-radius: 9999px;
+    padding: 3px 12px;
+    min-height: 22px;
+    box-shadow: none;
+    transition: all 0.2s ease;
+
+    label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: col.$fg_color_muted;
+    }
+
+    &:hover {
+      background-color: #1e2638;
+      label {
+        color: col.$accent;
+      }
+    }
+  }
+}
+
+/* 6. UNIFIED INPUT PILL (Fondo sólido sin transparencia) */
+.ai-input-pill {
+  background-color: #141724; // 100% Sólido
+  border: none;
+  border-radius: 9999px;
+  padding: 4px 6px 4px 16px;
+  min-height: 44px;
+  box-shadow: none;
+
+  entry.ai-text-input {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: col.$fg_color;
+    font-family: "Fredoka", sans-serif;
+    font-weight: 300;
+    font-size: 0.88rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  button.ai-send-arrow-btn {
+    background-color: col.$accent;
+    border: none;
+    border-radius: 9999px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    transition: all 0.2s ease;
+
+    .ai-send-icon {
+      color: col.$bg_color;
+      -gtk-icon-size: 16px;
+    }
+
+    &:hover {
+      background-color: col.$accent_hover;
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+
+  &:focus-within {
+    box-shadow: none;
+  }
+}

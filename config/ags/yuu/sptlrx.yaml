@@ -1,0 +1,7 @@
+player: mpris
+ignoreErrors: true
+timerInterval: 200
+updateInterval: 2000
+mpris:
+  players:
+    - spotify

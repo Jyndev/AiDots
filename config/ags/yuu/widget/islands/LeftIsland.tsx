@@ -4,7 +4,7 @@ import { Gtk } from "ags/gtk4"
 
 export function LeftIsland() {
   return (
-    <box class="island left-island">
+    <box class="island left-island" valign={Gtk.Align.START}>
       <box class="content">
         <image class="custom-icon" iconName="custom-arch-symbolic" pixel_size={30} />
       </box>

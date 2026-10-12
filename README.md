@@ -88,17 +88,16 @@ cd yay && makepkg -si
 
 ### 2️⃣ Instalación de Paquetes Necesarios
 
-Hemos optimizado las dependencias. Ahora usamos `kitty` como terminal y `ags` para la interfaz.
+Todas las dependencias esenciales para Hyprland, la barra Yuu AGS (con letras sincronizadas de Spotify, Centro de Control, Gemini Chat), utilidades del sistema y personalización estética.
 
 **Paquetes Oficiales (Pacman):**
 ```bash
-sudo pacman -S kitty gnome-tweaks swww fastfetch rofi-wayland nemo cinnamon-translations ttf-jetbrains-mono-nerd zenity bc eog gnome-system-monitor evince xdg-desktop-portal-hyprland xdg-desktop-portal-gtk ffmpeg ttf-nunito nemo-fileroller
+sudo pacman -S --needed kitty nwg-look awww fastfetch rofi nemo cinnamon-translations ttf-jetbrains-mono-nerd zenity bc eog gnome-system-monitor evince xdg-desktop-portal-hyprland xdg-desktop-portal-gtk ffmpeg ttf-nunito nemo-fileroller dart-sass playerctl wl-clipboard libpulse networkmanager wireplumber libnotify nodejs npm openrgb hyprlock
 ```
 
 **Paquetes de la Comunidad (AUR):**
-*(Usamos el comando simple de yay, y elegimos aylurs-gtk-shell como provedor principal de ags).*
 ```bash
-yay -S aylurs-gtk-shell hyprshot visual-studio-code-bin mpvpaper matugen-bin ttf-fredoka-one hypr-dock youtube-music
+yay -S --needed aylurs-gtk-shell-git hyprshot visual-studio-code-bin mpvpaper matugen-bin ttf-fredoka-one hypr-dock spotify sptlrx-bin
 ```
 
 ---
@@ -113,7 +112,17 @@ Clona este repositorio (si no lo has hecho aún) y mueve las configuraciones.
    cp -r config/* ~/.config/
    ```
 
-2. **Crea los directorios de caché esenciales:**
+2. **Otorga permisos de ejecución a los scripts:**
+   ```bash
+   chmod +x ~/.config/hypr/scripts/cursor-sync.sh ~/.config/ags/yuu/run_ags.sh
+   ```
+
+3. **Instala las dependencias de JavaScript/TypeScript de la barra AGS:**
+   ```bash
+   cd ~/.config/ags/yuu && npm install
+   ```
+
+4. **Crea los directorios de caché esenciales:**
    El gestor de temas y la pantalla de bloqueo necesitan estas carpetas para evitar errores en su primer arranque.
    ```bash
    mkdir -p ~/.cache/hyprlock ~/.cache/albumart ~/.cache/liveWallpaper
@@ -123,12 +132,16 @@ Clona este repositorio (si no lo has hecho aún) y mueve las configuraciones.
 
 ### 4️⃣ Temas, Iconos y Fuentes (Estética)
 
-Para que el sistema luzca igual a las capturas, asegúrate de tener aplicados los entornos GTK correctos a través de `gnome-tweaks` (Retoques) o herramientas predefinidas:
+Para cambiar de cursor, iconos, fuentes o temas GTK sin complicaciones y con **actualización en tiempo real**, utiliza **`nwg-look`** (se abre flotante en el centro de tu pantalla):
 
-* 🏙️ **Iconos:** `Magna-Dark-Icons`
-* 🖍️ **Tema GTK:** `Lavanda-gtk-theme`
-* 🗚 **Fuente principal GTK:** `Fredoka`
-* 🖱️ **Cursor:** `Anya-cursor-v3`
+```bash
+nwg-look
+```
+
+* 🏙️ **Iconos:** `Colloid-Purple` (o `Magna-Dark-Icons`)
+* 🖍️ **Tema GTK:** `Tokyonight-Dark` (o `Lavanda-gtk-theme`)
+* 🗚 **Fuente principal GTK:** `Fredoka` (11pt)
+* 🖱️ **Cursor:** `Afterglow-cursors` (o `Adwaita` / `Anya-cursor-v3`) a tamaño `24`
 
 **Fuentes adicionales para símbolos y caracteres asiáticos:**
 ```bash

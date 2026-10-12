@@ -10,6 +10,8 @@
 @use "widget/notification/notification";
 @use "widget/network/network";
 @use "widget/control_center/control_center";
+@use "widget/gemini/gemini";
+@use "widget/settings/settings";
 
 
 window.Bar {

@@ -1,0 +1,318 @@
+@use "colors" as col;
+
+// Mapeo dinámico usando la plantilla _colors.scss
+$cc_border: rgba(col.$accent, 0.3);
+$cc_radius: 20px;
+
+$cc_primary: col.$accent;
+$cc_secondary: col.$fg_color;
+$cc_active_bg: rgba(col.$accent, 0.2);
+
+button {
+  outline: none;
+  box-shadow: none;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:active {
+    background-image: none;
+    background-color: $cc_active_bg;
+  }
+}
+
+.control-card {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  min-width: 350px;
+}
+
+.cc-block {
+  background-color: col.$bg_color;
+  border-radius: $cc_radius;
+  padding: 15px;
+}
+
+.control-header {
+  .user-photo {
+    background-color: transparent;
+    border-radius: 50%;
+    border: 2px solid $cc_border;
+  }
+
+  .user-name {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .uptime-title {
+    color: col.$fg_color_muted;
+    font-size: 11px;
+  }
+}
+
+.user-info-pill {
+  background-color: col.$bg_color;
+  border-radius: 50px;
+  padding: 8px 30px;
+  margin-top: -5px; // Se acerca ligeramente a la imagen superior
+}
+
+.nav-tabs {
+  margin: 0;
+  padding: 6px;
+  background-color: col.$bg_color;
+  border-radius: 50px;
+  
+  // Customizar StackSwitcher usualmente requiere estilos específicos
+  button {
+    color: white;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: $cc_radius;
+    background-color: transparent;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    &:checked {
+      background: linear-gradient(135deg, $cc_primary, $cc_secondary);
+      color: #121212;
+    }
+  }
+}
+
+.content-area-stack {
+  // Ahora manejado por su contenedor cc-block
+}
+
+.list-page-box {
+  min-height: 250px;
+}
+
+.section-title {
+  color: $cc_primary;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.toggle-btn-row, .segmented-control {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: $cc_radius;
+  padding: 4px;
+  
+  button {
+    color: white;
+    border-radius: $cc_radius;
+    padding: 6px 12px;
+    
+    &:hover { background-color: rgba(255, 255, 255, 0.1); }
+    &.active {
+      background-color: $cc_primary;
+      color: #121212;
+    }
+  }
+}
+
+.theme-grid-action {
+  button {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    min-height: 40px;
+    font-size: 12px;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: $cc_secondary;
+    }
+  }
+}
+
+.split-action-row {
+  // Sin margen, el wrapper controla todo
+}
+
+.split-action-btn {
+  border-radius: 50px;
+  box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
+  border: none;
+  min-height: 40px;
+  padding: 0;
+  background-color: transparent; // Prevents solid color override from GTK
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  background-image: linear-gradient(105deg, white 65%, $cc_primary 65%);
+  .split-lbl { color: col.$bg_color; transition: color 0.3s; }  // bg oscuro sobre blanco = contraste perfecto
+  .split-img { color: white; transition: color 0.3s; }
+
+  &.active {
+    background-image: linear-gradient(105deg, $cc_primary 65%, white 65%);
+    .split-lbl { color: white; }
+    .split-img { color: $cc_primary; }
+
+    &:hover {
+      background-image: linear-gradient(105deg, $cc_primary 65%, white 65%);
+      background-color: transparent;
+      opacity: 0.85;
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &:hover {
+    background-image: linear-gradient(105deg, white 65%, $cc_primary 65%);
+    background-color: transparent;
+    opacity: 0.85;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Estructura interna del botón (Box)
+.split-box {
+  // layout controlado por padding/margenes interos
+}
+
+.split-lbl {
+  font-weight: 800;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 12px;
+}
+
+.split-img {
+  margin-right: 12px;
+}
+
+.footer-row {
+  button {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $cc_radius;
+    color: $cc_secondary;
+    padding: 10px;
+    
+    &:hover {
+      background-color: $cc_active_bg;
+      color: white;
+    }
+    
+    image { color: $cc_secondary; }
+  }
+}
+
+.list-item-box {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  label { color: white; }
+}
+
+.close-panel-btn {
+  margin-top: 0;
+  color: white;
+  opacity: 0.5;
+  transition: 0.2s all;
+  
+  &:hover {
+    opacity: 1;
+    color: $cc_primary;
+  }
+}
+
+// ── Notification History Panel ─────────────────────────────────────────────
+
+.history-topbar {
+  padding: 4px 2px 8px 2px;
+}
+
+.history-title {
+  color: col.$fg_color;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.history-clear-btn {
+  background-color: rgba(col.$accent, 0.1);
+  border-radius: 50px;
+  border: 1px solid rgba(col.$accent, 0.2);
+  padding: 2px 10px;
+  color: col.$accent;
+  font-size: 12px;
+  transition: 0.2s all;
+
+  image { color: col.$accent; }
+
+  &:hover {
+    background-color: rgba(col.$accent, 0.25);
+  }
+}
+
+.history-pill {
+  background-color: col.$bg_color_light;
+  border-radius: 35px;
+  padding: 10px 16px;
+  min-height: 60px;
+  border: 1px solid rgba(col.$fg_color_muted, 0.12);
+  transition: 0.2s all;
+
+  &:hover {
+    border-color: rgba(col.$accent, 0.3);
+  }
+}
+
+.history-delete-btn {
+  background: transparent;
+  box-shadow: none;
+  min-width: 26px;
+  min-height: 26px;
+  border-radius: 50%;
+  padding: 0;
+  transition: 0.2s all;
+
+  image { color: col.$fg_color_muted; }
+
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.15);
+    image { color: #ff6b6b; }
+  }
+}
+
+.history-empty {
+  color: col.$fg_color_muted;
+  font-size: 13px;
+  padding: 30px 0;
+}
+
+// ── Clipboard Specifics ──────────────────────────────────────────────────
+
+.clip-pill {
+  // Hereda de history-pill
+  .clip-icon {
+    background-color: rgba(col.$accent, 0.1);
+    border-radius: 12px;
+    image { color: col.$accent; }
+  }
+}
+
+.clip-text-btn {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-radius: $cc_radius;
+  transition: 0.2s all;
+
+  &:hover {
+    background-color: rgba(col.$accent, 0.05);
+    label { color: col.$accent; }
+  }
+}

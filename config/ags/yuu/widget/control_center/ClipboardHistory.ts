@@ -101,35 +101,34 @@ export function copyToClipboard(entry: ClipboardEntry) {
     }
 }
 
-// ── Watcher ───────────────────────────────────────────────────────────
+// ── Watcher (Asíncrono y no bloqueante) ───────────────────────────────────
 let lastContent = "";
+let isChecking = false;
 
-GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, () => {
+GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1500, () => {
+    if (isChecking) return true;
     try {
-        // 1. Verificar TIPOS disponibles (mime-types)
-        const [res, out] = GLib.spawn_command_line_sync("wl-paste --list-types");
-        const types = new TextDecoder().decode(out);
-
-        if (types.includes("image/png") || types.includes("image/jpeg")) {
-            // Es una imagen. Sacamos un hash o algo rapido para saber si es nueva? 
-            // Por simplicidad, comparamos por "tipos" + "tiempo" o simplemente dejamos que el user la guarde.
-            // Para evitar loops infinitos, si el ultimo era imagen no re-guardamos la misma.
-            if (lastContent !== "IMAGE_MARKER") {
-                const timestamp = Date.now();
-                const imgPath = `${GLib.get_home_dir()}/.cache/ags-yuu/clip-images/img_${timestamp}.png`;
-                GLib.spawn_command_line_sync(`bash -c "wl-paste > '${imgPath}'"`);
-                lastContent = "IMAGE_MARKER";
-                addToClipboard("Imagen", imgPath);
+        isChecking = true;
+        const proc = new Gio.Subprocess({
+            argv: ["wl-paste", "-n"],
+            flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
+        });
+        proc.init(null);
+        proc.communicate_utf8_async(null, null, (_obj, res) => {
+            try {
+                const [, stdout] = proc.communicate_utf8_finish(res);
+                isChecking = false;
+                const current = (stdout || "").trim();
+                if (current !== "" && current !== lastContent && current !== "IMAGE_MARKER") {
+                    lastContent = current;
+                    addToClipboard(current);
+                }
+            } catch {
+                isChecking = false;
             }
-        } else {
-            // Es texto
-            const [res2, out2] = GLib.spawn_command_line_sync("wl-paste -n");
-            const current = new TextDecoder().decode(out2).trim();
-            if (current !== "" && current !== lastContent) {
-                lastContent = current;
-                addToClipboard(current);
-            }
-        }
-    } catch (e) {}
+        });
+    } catch {
+        isChecking = false;
+    }
     return true;
 });
